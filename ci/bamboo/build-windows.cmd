@@ -72,9 +72,13 @@ mkdir build\release
 mkdir build\scripts
 set NUPIC_DEPLOYMENT_BUILD=1
 
+set _NUPIC_CORE_ROOT_DIR=%CD%
+
 pushd build\scripts
 :: ZZZ remove diagnostics
 dir ..\..
+dir ..\..\external
+dir ..\..\src
 :: ZZZ end diagnostics
 
 :: Configure for non-debug build
@@ -83,7 +87,7 @@ cmake ^
   -DCMAKE_BUILD_TYPE=Release ^
   -DCMAKE_INSTALL_PREFIX=..\release ^
   -DPY_EXTENSIONS_DIR=..\..\bindings\py\nupic\bindings ^
-  ..\..
+  %_NUPIC_CORE_ROOT_DIR%
 
 :: Make nupic.core from non-debug configuration
 cmake --build . --target install --config Release
