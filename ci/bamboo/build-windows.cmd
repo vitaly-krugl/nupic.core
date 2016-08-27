@@ -73,6 +73,10 @@ mkdir build\scripts
 set NUPIC_DEPLOYMENT_BUILD=1
 
 pushd build\scripts
+:: ZZZ remove diagnostics
+dir ..\..
+:: ZZZ end diagnostics
+
 :: Configure for non-debug build
 cmake ^
   -G "MinGW Makefiles" ^
