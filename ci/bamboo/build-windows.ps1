@@ -69,14 +69,12 @@ copy "C:\Program Files\Git\usr\bin\msys*.dll" "C:\Program Files\PatchFromGit"
 $env:PATH = 'C:\Program Files\PatchFromGit;' + $env:PATH
 
 # Setup MinGW GCC as a valid distutils compiler
-copy external\windows64-gcc\bin\distutils.cfg %PYTHONHOME%\Lib\distutils.cfg
+copy ".\external\windows64-gcc\bin\distutils.cfg" "$env:PYTHONHOME\Lib\distutils.cfg"
 
 # Build nupic.core
 mkdir build\release
 mkdir build\scripts
 set NUPIC_DEPLOYMENT_BUILD=1
-
-set _NUPIC_CORE_ROOT_DIR=%CD%
 
 pushd build\scripts
 # ZZZ remove diagnostics
@@ -91,7 +89,7 @@ cmake ^
   -DCMAKE_BUILD_TYPE=Release ^
   -DCMAKE_INSTALL_PREFIX=..\release ^
   -DPY_EXTENSIONS_DIR=..\..\bindings\py\nupic\bindings ^
-  %_NUPIC_CORE_ROOT_DIR%
+  ..\..
 
 # Make nupic.core from non-debug configuration
 cmake --build . --target install --config Release
