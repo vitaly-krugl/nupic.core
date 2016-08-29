@@ -78,11 +78,11 @@ $env:PATH = 'C:\Program Files\PatchFromGit;' + $env:PATH
 copy ".\external\windows64-gcc\bin\distutils.cfg" "$env:PYTHONHOME\Lib\distutils.cfg"
 
 # Build nupic.core
-mkdir build\release
-mkdir build\scripts
+mkdir .\build\release
+mkdir .\build\scripts
 set NUPIC_DEPLOYMENT_BUILD=1
 
-pushd build\scripts
+pushd .\build\scripts
 
 # ZZZ remove diagnostics
 dir ..\..
