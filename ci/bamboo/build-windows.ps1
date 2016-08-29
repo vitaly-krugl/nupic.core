@@ -47,6 +47,8 @@
 #                 junit-test-results.xml
 #                 htmlcov/
 
+$ErrorActionPreference = "Stop"
+
 
 # Remove sh.exe from the paths (CMake doesn't like it)
 Write-Host "ZZZ PATH=" $env:PATH
