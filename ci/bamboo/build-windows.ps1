@@ -50,11 +50,16 @@
 
 # Remove sh.exe from the paths (CMake doesn't like it)
 Write-Host "ZZZ PATH=" $env:PATH
+Write-Host "ZZZ Looking for sh BEFORE cleaning PATH"
 where.exe sh
+
+Write-Host "ZZZ  cleaning PATH"
 $env:PATH = $env:PATH.Replace('C:\Program Files (x86)\Git\bin','')
 $env:PATH = $env:PATH.Replace('C:\Program Files\Git\usr\bin','')
 $env:PATH = $env:PATH.Replace('C:\Program Files\OpenSSH\bin','')
 $env:PATH = $env:PATH.Replace('C:\MinGW\msys\1.0\bin','')
+
+Write-Host "ZZZ Looking for sh AFTER cleaning PATH"
 where.exe sh
 
 
@@ -77,6 +82,7 @@ mkdir build\scripts
 set NUPIC_DEPLOYMENT_BUILD=1
 
 pushd build\scripts
+
 # ZZZ remove diagnostics
 dir ..\..
 dir ..\..\external
