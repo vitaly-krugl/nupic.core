@@ -50,12 +50,12 @@
 
 # Remove sh.exe from the paths (CMake doesn't like it)
 Write-Host "ZZZ PATH=" $env:PATH
-Get-Command sh
+where.exe sh
 $env:PATH = $env:PATH.Replace('C:\Program Files (x86)\Git\bin','')
 $env:PATH = $env:PATH.Replace('C:\Program Files\Git\usr\bin','')
 $env:PATH = $env:PATH.Replace('C:\Program Files\OpenSSH\bin','')
 $env:PATH = $env:PATH.Replace('C:\MinGW\msys\1.0\bin','')
-Get-Command sh
+where.exe sh
 
 
 # Make unix-compatible patch.exe available to the build by copying it from
