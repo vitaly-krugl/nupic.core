@@ -90,11 +90,11 @@ dir ..\..\src
 # ZZZ end diagnostics
 
 # Configure for non-debug build
-cmake ^
-  -G "MinGW Makefiles" ^
-  -DCMAKE_BUILD_TYPE=Release ^
-  -DCMAKE_INSTALL_PREFIX=..\release ^
-  -DPY_EXTENSIONS_DIR=..\..\bindings\py\nupic\bindings ^
+cmake `
+  -G "MinGW Makefiles"  `
+  -DCMAKE_BUILD_TYPE=Release `
+  -DCMAKE_INSTALL_PREFIX=..\release `
+  -DPY_EXTENSIONS_DIR=..\..\bindings\py\nupic\bindings `
   ..\..
 
 # Make nupic.core from non-debug configuration
