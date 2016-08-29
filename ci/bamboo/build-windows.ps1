@@ -61,6 +61,7 @@ $env:PATH = $env:PATH.Replace('C:\MinGW\msys\1.0\bin','')
 
 Write-Host "ZZZ Looking for sh AFTER cleaning PATH"
 where.exe sh
+Write-Host "ZZZ DONE Looking for sh AFTER cleaning PATH"
 
 
 # Make unix-compatible patch.exe available to the build by copying it from
