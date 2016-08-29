@@ -49,10 +49,12 @@
 
 
 # Remove sh.exe from the paths (CMake doesn't like it)
-set PATH=%PATH:C:\Program Files (x86)\Git\bin;=%
-set PATH=%PATH:C:\Program Files\Git\usr\bin;=%
-set PATH=%PATH:C:\Program Files\OpenSSH\bin;=%
-set PATH=%PATH:C:\MinGW\msys\1.0\bin;=%
+Write-Host "ZZZ PATH=" $env:PATH
+$env:PATH = $env:PATH.Replace('C:\Program Files (x86)\Git\bin','')
+$env:PATH = $env:PATH.Replace('C:\Program Files\Git\usr\bin','')
+$env:PATH = $env:PATH.Replace('C:\Program Files\OpenSSH\bin','')
+$env:PATH = $env:PATH.Replace('C:\MinGW\msys\1.0\bin','')
+
 
 # Make unix-compatible patch.exe available to the build by copying it from
 # Git\usr\bin (that we remove from PATH) to another directory and adding it to
@@ -62,7 +64,7 @@ set PATH=%PATH:C:\MinGW\msys\1.0\bin;=%
 mkdir "C:\Program Files\PatchFromGit"
 copy "C:\Program Files\Git\usr\bin\patch.exe" "C:\Program Files\PatchFromGit"
 copy "C:\Program Files\Git\usr\bin\msys*.dll" "C:\Program Files\PatchFromGit"
-set PATH=C:\Program Files\PatchFromGit;%PATH%
+$env:PATH = 'C:\Program Files\PatchFromGit;' + $env:PATH
 
 # Setup MinGW GCC as a valid distutils compiler
 copy external\windows64-gcc\bin\distutils.cfg %PYTHONHOME%\Lib\distutils.cfg
