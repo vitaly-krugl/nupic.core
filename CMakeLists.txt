@@ -63,6 +63,10 @@ else()
 endif()
 
 
+message(STATUS "CMAKE_C_COMPILER   = ${CMAKE_C_COMPILER}")
+message(STATUS "CMAKE_CXX_COMPILER = ${CMAKE_CXX_COMPILER}")
+
+
 # Identify platform name.
 string(TOLOWER ${CMAKE_SYSTEM_NAME} PLATFORM)
 

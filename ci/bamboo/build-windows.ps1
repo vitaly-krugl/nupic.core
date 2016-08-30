@@ -139,6 +139,7 @@ dir ..\..\src
 # ZZZ end diagnostics
 
 # Verify that gcc and g++ are available and log their location
+Write-Host "Checking that gcc and g++ are available."
 WrapCmd { where.exe gcc }
 WrapCmd { where.exe g++ }
 
