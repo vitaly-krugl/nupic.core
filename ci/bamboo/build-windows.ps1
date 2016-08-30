@@ -77,9 +77,6 @@ function WrapCmd
   }
 }
 
-
-WrapCmd { where.exe ZZZ }
-
 # Remove sh.exe from the paths (CMake doesn't like it)
 Write-Host "ZZZ PATH=" $env:PATH
 Write-Host "ZZZ Looking for sh BEFORE cleaning PATH"
@@ -141,7 +138,15 @@ dir ..\..\external
 dir ..\..\src
 # ZZZ end diagnostics
 
+# Verify that gcc and g++ are available and log their location
+WrapCmd { where.exe gcc }
+WrapCmd { where.exe g++ }
+
+
 # Configure for non-debug build
+$env:CC = gcc
+$env:CXX= g++
+
 WrapCmd {
   cmake `
     -G "MinGW Makefiles"  `
