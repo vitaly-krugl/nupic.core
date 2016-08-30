@@ -56,19 +56,25 @@ $ErrorActionPreference = "Stop"
 #
 function WrapCmd
 {
-    [CmdletBinding()]
-    param (
-        [Parameter(Position=0, Mandatory=1)]
-        [scriptblock]$Command,
-        [Parameter(Position=1, Mandatory=0)]
-        [string]$ErrorMessage = "Command failed.`n$Command"
-    )
-    & $Command
-    if ($LastExitCode -ne 0) {
-        throw "WrapCmd: $ErrorMessage"
-    }
+  [CmdletBinding()]
+  param (
+    [Parameter(Position=0, Mandatory=1)]
+    [scriptblock]$Command,
+    [Parameter(Position=1, Mandatory=0)]
+    [string]$ErrorMessage = "ERROR: Command failed.`n$Command"
+  )
+  & $Command
+  if ($LastExitCode -eq 0) {
+    $? = $true
+  else {
+    #throw "WrapCmd: $ErrorMessage"
+    Write-Host "WrapCmd: $ErrorMessage"
+    $? = $false
+  }
 }
 
+
+WrapCmd { blahblahblah ZZZ }
 
 # Remove sh.exe from the paths (CMake doesn't like it)
 Write-Host "ZZZ PATH=" $env:PATH
@@ -76,7 +82,7 @@ Write-Host "ZZZ Looking for sh BEFORE cleaning PATH"
 
 &where.exe sh
 if ($LastExitCode -ne 0) {
-    throw "sh.exe wasn't in PATH."
+  throw "sh.exe wasn't in PATH."
 }
 
 Write-Host "ZZZ  cleaning PATH"
@@ -88,7 +94,7 @@ $env:PATH = $env:PATH.Replace('C:\MinGW\msys\1.0\bin','')
 Write-Host "Checking to make sure that sh command was removed from PATH"
 &where.exe sh
 if ($LastExitCode -eq 0) {
-    throw "Failed to remove sh.exe from PATH."
+  throw "Failed to remove sh.exe from PATH."
 }
 
 Write-Host "ZZZ DONE Looking for sh AFTER cleaning PATH"
