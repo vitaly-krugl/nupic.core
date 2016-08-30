@@ -138,7 +138,7 @@ dir ..\..\external
 dir ..\..\src
 # ZZZ end diagnostics
 
-# Verify that gcc and g++ are available and log their location
+# Verify that gcc and g++ are available and log their location and version
 Write-Host "Checking that gcc and g++ are available."
 WrapCmd { where.exe gcc }
 WrapCmd { gcc --version }
@@ -154,10 +154,11 @@ Write-Host "Configuring build of nupic.bindings via cmake."
 WrapCmd {
   cmake `
     -G "MinGW Makefiles"  `
-    -DCMAKE_BUILD_TYPE=Release `
-    -DCMAKE_INSTALL_PREFIX=..\release `
-    -DPY_EXTENSIONS_DIR=..\..\bindings\py\nupic\bindings `
-    ..\..
+    -DCMAKE_BUILD_TYPE="Release" `
+    -DCMAKE_INSTALL_PREFIX="..\release" `
+    -DNUPIC_BUILD_PYEXT_MODULES="ON" `
+    -DPY_EXTENSIONS_DIR="..\..\bindings\py\nupic\bindings" `
+    "..\.."
 }
 
 # Make nupic.core from non-debug configuration

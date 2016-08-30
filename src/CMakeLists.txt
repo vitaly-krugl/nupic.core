@@ -630,7 +630,6 @@ add_custom_target(tests_all
 if (NUPIC_BUILD_PYEXT_MODULES)
   include(UseSWIG)
 
-  message(STATUS "CMAKE_CXX_COMPILER_ID        = ${CMAKE_CXX_COMPILER_ID}")
   message(STATUS "PY_EXTENSIONS_DIR            = ${PY_EXTENSIONS_DIR}")
 
   # Set the output location for the language modules that are created.
