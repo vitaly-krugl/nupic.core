@@ -50,7 +50,9 @@
 $ErrorActionPreference = "Stop"
 
 
-# Use this function to wrap external commands for powershell error-checking
+# Use this function to wrap external commands for powershell error-checking.
+#
+# Returns True if command's $LastExitCode was 0, False otherwise
 #
 # Usage: WrapCmd { cmd arg1 arg2 ... }
 #
@@ -66,12 +68,12 @@ function WrapCmd
   )
   & $Command
   if ($LastExitCode -eq 0) {
-    $? = $true
+    return $true
   }
   else {
     #throw "WrapCmd: $ErrorMessage"
-    Write-Host "WrapCmd: $ErrorMessage"
-    $? = $false
+    Write-Error "WrapCmd: $ErrorMessage"
+    return $false
   }
 }
 
