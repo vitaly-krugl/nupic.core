@@ -100,7 +100,7 @@ Write-Host "ZZZ DONE Looking for sh AFTER cleaning PATH"
 # C:\Program Files\Git\usr\bin from Path to avoid build issue resulting from
 # sh.exe being on the path
 
-Write-Host "Checking that patch command was not present already"
+Write-Host "Checking that patch command was not present already."
 &where.exe patch
 if ($LastExitCode -eq 0) {
     throw "patch command was already available."
@@ -133,11 +133,11 @@ dir ..\..\src
 
 # Configure for non-debug build
 WrapCmd {
-  cmake
-    -G "MinGW Makefiles"
-    -DCMAKE_BUILD_TYPE=Release
-    -DCMAKE_INSTALL_PREFIX=..\release
-    -DPY_EXTENSIONS_DIR=..\..\bindings\py\nupic\bindings
+  cmake `
+    -G "MinGW Makefiles"  `
+    -DCMAKE_BUILD_TYPE=Release `
+    -DCMAKE_INSTALL_PREFIX=..\release `
+    -DPY_EXTENSIONS_DIR=..\..\bindings\py\nupic\bindings `
     ..\..
 }
 
