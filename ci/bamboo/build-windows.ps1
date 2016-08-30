@@ -124,7 +124,7 @@ mkdir .\build\scripts
 $env:NUPIC_DEPLOYMENT_BUILD = 1
 
 #pushd .\build\scripts
-pushd X:\build\scripts
+pushd x:\build\scripts
 
 # ZZZ remove diagnostics
 dir ..\..
