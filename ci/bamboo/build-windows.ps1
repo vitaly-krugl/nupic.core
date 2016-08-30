@@ -53,7 +53,7 @@ $ErrorActionPreference = "Stop"
 # Remove sh.exe from the paths (CMake doesn't like it)
 Write-Host "ZZZ PATH=" $env:PATH
 Write-Host "ZZZ Looking for sh BEFORE cleaning PATH"
-where.exe sh
+&where.exe sh
 
 Write-Host "ZZZ  cleaning PATH"
 $env:PATH = $env:PATH.Replace('C:\Program Files (x86)\Git\bin','')
@@ -62,7 +62,7 @@ $env:PATH = $env:PATH.Replace('C:\Program Files\OpenSSH\bin','')
 $env:PATH = $env:PATH.Replace('C:\MinGW\msys\1.0\bin','')
 
 Write-Host "ZZZ Looking for sh AFTER cleaning PATH"
-where.exe sh
+&where.exe sh
 Write-Host "ZZZ DONE Looking for sh AFTER cleaning PATH"
 
 
@@ -93,7 +93,7 @@ dir ..\..\src
 # ZZZ end diagnostics
 
 # Configure for non-debug build
-cmake `
+&cmake `
   -G "MinGW Makefiles"  `
   -DCMAKE_BUILD_TYPE=Release `
   -DCMAKE_INSTALL_PREFIX=..\release `
@@ -101,33 +101,33 @@ cmake `
   ..\..
 
 # Make nupic.core from non-debug configuration
-cmake --build . --target install --config Release
+&cmake --build . --target install --config Release
 popd
 
 # Create a python wheel in the destination wheelhouse
-python setup.py bdist_wheel --dist-dir .\nupic_bindings_wheelhouse
+&python setup.py bdist_wheel --dist-dir .\nupic_bindings_wheelhouse
 
 #
 # Run tests
 #
 
 # Install nupic.bindings before running c++ tests; py_region_test depends on it
-pip install --ignore-installed .\nupic_bindings_wheelhouse\nupic.bindings-*.whl
+&pip install --ignore-installed .\nupic_bindings_wheelhouse\nupic.bindings-*.whl
 
-pushd build\release\bin
-connections_performance_test.exe
-cpp_region_test.exe
-helloregion.exe
-hello_sp_tp.exe
-prototest.exe
-py_region_test.exe
-unit_tests.exe
+pushd .\build\release\bin
+&connections_performance_test.exe
+&cpp_region_test.exe
+&helloregion.exe
+&hello_sp_tp.exe
+&prototest.exe
+&py_region_test.exe
+&unit_tests.exe
 popd
 
 # So that py.test will deposit its artifacts in test_results
 mkdir .\test_results
 pushd .\test_results
 
-python ..\setup.py test
+&python ..\setup.py test
 
 popd
