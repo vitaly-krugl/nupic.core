@@ -51,6 +51,7 @@ option(NUPIC_BUILD_PYEXT_MODULES
        ON)
 
 message(STATUS "NUPIC_BUILD_PYEXT_MODULES = ${NUPIC_BUILD_PYEXT_MODULES}")
+message(STATUS "PY_EXTENSIONS_DIR         = ${PY_EXTENSIONS_DIR}")
 
 #
 # Identify build type - local or deployment (Travis)

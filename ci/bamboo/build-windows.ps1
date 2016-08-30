@@ -81,12 +81,9 @@ function WrapCmd
 Write-Host "ZZZ PATH=" $env:PATH
 Write-Host "ZZZ Looking for sh BEFORE cleaning PATH"
 
-&where.exe sh
-if ($LastExitCode -ne 0) {
-  throw "sh.exe wasn't in PATH."
-}
+# Validate expectation that sh.exe is in PATH prior to its removal
+WrapCmd { where.exe sh }
 
-Write-Host "ZZZ  cleaning PATH"
 $env:PATH = $env:PATH.Replace('C:\Program Files (x86)\Git\bin','')
 $env:PATH = $env:PATH.Replace('C:\Program Files\Git\usr\bin','')
 $env:PATH = $env:PATH.Replace('C:\Program Files\OpenSSH\bin','')
@@ -117,10 +114,7 @@ mkdir "C:\Program Files\PatchFromGit"
 copy "C:\Program Files\Git\usr\bin\patch.exe" "C:\Program Files\PatchFromGit"
 copy "C:\Program Files\Git\usr\bin\msys*.dll" "C:\Program Files\PatchFromGit"
 $env:PATH = 'C:\Program Files\PatchFromGit;' + $env:PATH
-&where.exe patch
-if ($LastExitCode -ne 0) {
-    throw "Failed to provide patch command."
-}
+WrapCmd { where.exe patch }
 
 # Setup MinGW GCC as a valid distutils compiler
 copy ".\external\windows64-gcc\bin\distutils.cfg" "$env:PYTHONHOME\Lib\distutils.cfg"
@@ -155,9 +149,9 @@ WrapCmd {
   cmake `
     -G "MinGW Makefiles"  `
     -DCMAKE_BUILD_TYPE="Release" `
-    -DCMAKE_INSTALL_PREFIX="..\release" `
+    -DCMAKE_INSTALL_PREFIX:PATH="..\release" `
     -DNUPIC_BUILD_PYEXT_MODULES="ON" `
-    -DPY_EXTENSIONS_DIR="..\..\bindings\py\nupic\bindings" `
+    -DPY_EXTENSIONS_DIR:PATH="..\..\bindings\py\nupic\bindings" `
     "..\.."
 }
 
@@ -172,12 +166,14 @@ popd
 Write-Host "Building nupic.bindings python wheel."
 WrapCmd { python setup.py bdist_wheel --dist-dir .\nupic_bindings_wheelhouse }
 
+
 #
 # Run tests
 #
 
 # Install nupic.bindings before running c++ tests; py_region_test depends on it
 Write-Host "Installing from built nupic.bindings wheel."
+dir .\nupic_bindings_wheelhouse
 WrapCmd { pip install --ignore-installed .\nupic_bindings_wheelhouse\nupic.bindings-*.whl }
 
 pushd .\build\release\bin

@@ -630,8 +630,6 @@ add_custom_target(tests_all
 if (NUPIC_BUILD_PYEXT_MODULES)
   include(UseSWIG)
 
-  message(STATUS "PY_EXTENSIONS_DIR            = ${PY_EXTENSIONS_DIR}")
-
   # Set the output location for the language modules that are created.
   set(CMAKE_SWIG_OUTDIR ${PROJECT_BINARY_DIR})
 
