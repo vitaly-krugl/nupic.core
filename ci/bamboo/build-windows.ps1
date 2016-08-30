@@ -74,7 +74,7 @@ function WrapCmd
 Write-Host "ZZZ PATH=" $env:PATH
 Write-Host "ZZZ Looking for sh BEFORE cleaning PATH"
 &where.exe sh
-if ($LastExitCode -e 0) {
+if ($LastExitCode -eq 0) {
     throw "Failed to remove sh.exe from PATH."
 }
 
@@ -86,7 +86,7 @@ $env:PATH = $env:PATH.Replace('C:\MinGW\msys\1.0\bin','')
 
 Write-Host "ZZZ Looking for sh AFTER cleaning PATH"
 &where.exe sh
-if ($LastExitCode -e 0) {
+if ($LastExitCode -eq 0) {
     throw "Failed to remove sh.exe from PATH."
 }
 
@@ -98,10 +98,20 @@ Write-Host "ZZZ DONE Looking for sh AFTER cleaning PATH"
 # PATH; the reason we copy it is that logic below removes
 # C:\Program Files\Git\usr\bin from Path to avoid build issue resulting from
 # sh.exe being on the path
+
+&where.exe patch
+if ($LastExitCode -eq 0) {
+    throw "Patch is already available."
+}
+
 mkdir "C:\Program Files\PatchFromGit"
 copy "C:\Program Files\Git\usr\bin\patch.exe" "C:\Program Files\PatchFromGit"
 copy "C:\Program Files\Git\usr\bin\msys*.dll" "C:\Program Files\PatchFromGit"
 $env:PATH = 'C:\Program Files\PatchFromGit;' + $env:PATH
+&where.exe patch
+if ($LastExitCode -ne 0) {
+    throw "Failed to provide patch."
+}
 
 # Setup MinGW GCC as a valid distutils compiler
 copy ".\external\windows64-gcc\bin\distutils.cfg" "$env:PYTHONHOME\Lib\distutils.cfg"
