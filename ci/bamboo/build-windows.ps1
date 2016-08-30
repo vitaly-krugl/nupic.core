@@ -50,7 +50,7 @@
 $ErrorActionPreference = "Stop"
 
 
-# Use this function to wrap external commands to get powershell error-checking
+# Use this function to wrap external commands for powershell error-checking
 #
 # Usage: WrapCmd { cmd arg1 arg2 ... }
 #
@@ -65,7 +65,7 @@ function WrapCmd
     )
     & $Command
     if ($LastExitCode -ne 0) {
-        throw "Exec: $ErrorMessage"
+        throw "WrapCmd: $ErrorMessage"
     }
 }
 
@@ -74,6 +74,9 @@ function WrapCmd
 Write-Host "ZZZ PATH=" $env:PATH
 Write-Host "ZZZ Looking for sh BEFORE cleaning PATH"
 &where.exe sh
+if ($LastExitCode -e 0) {
+    throw "Failed to remove sh.exe from PATH."
+}
 
 Write-Host "ZZZ  cleaning PATH"
 $env:PATH = $env:PATH.Replace('C:\Program Files (x86)\Git\bin','')
@@ -83,6 +86,10 @@ $env:PATH = $env:PATH.Replace('C:\MinGW\msys\1.0\bin','')
 
 Write-Host "ZZZ Looking for sh AFTER cleaning PATH"
 &where.exe sh
+if ($LastExitCode -e 0) {
+    throw "Failed to remove sh.exe from PATH."
+}
+
 Write-Host "ZZZ DONE Looking for sh AFTER cleaning PATH"
 
 
