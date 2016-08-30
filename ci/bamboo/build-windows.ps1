@@ -85,7 +85,7 @@ $env:PATH = $env:PATH.Replace('C:\Program Files\Git\usr\bin','')
 $env:PATH = $env:PATH.Replace('C:\Program Files\OpenSSH\bin','')
 $env:PATH = $env:PATH.Replace('C:\MinGW\msys\1.0\bin','')
 
-Write-Host "ZZZ Looking for sh AFTER cleaning PATH"
+Write-Host "Checking to make sure that sh command was removed from PATH"
 &where.exe sh
 if ($LastExitCode -eq 0) {
     throw "Failed to remove sh.exe from PATH."
@@ -100,6 +100,7 @@ Write-Host "ZZZ DONE Looking for sh AFTER cleaning PATH"
 # C:\Program Files\Git\usr\bin from Path to avoid build issue resulting from
 # sh.exe being on the path
 
+Write-Host "Checking that patch command was not present already"
 &where.exe patch
 if ($LastExitCode -eq 0) {
     throw "patch command was already available."
@@ -132,11 +133,11 @@ dir ..\..\src
 
 # Configure for non-debug build
 WrapCmd {
-  cmake `
-    -G "MinGW Makefiles"  `
-    -DCMAKE_BUILD_TYPE=Release `
-    -DCMAKE_INSTALL_PREFIX=..\release `
-    -DPY_EXTENSIONS_DIR=..\..\bindings\py\nupic\bindings `
+  cmake
+    -G "MinGW Makefiles"
+    -DCMAKE_BUILD_TYPE=Release
+    -DCMAKE_INSTALL_PREFIX=..\release
+    -DPY_EXTENSIONS_DIR=..\..\bindings\py\nupic\bindings
     ..\..
 }
 
