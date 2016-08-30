@@ -141,13 +141,16 @@ dir ..\..\src
 # Verify that gcc and g++ are available and log their location
 Write-Host "Checking that gcc and g++ are available."
 WrapCmd { where.exe gcc }
+WrapCmd { gcc --version }
 WrapCmd { where.exe g++ }
+WrapCmd { g++ --version }
 
 
 # Configure for non-debug build
-$env:CC = gcc
-$env:CXX= g++
+$env:CC = "gcc"
+$env:CXX = "g++"
 
+Write-Host "Configuring build of nupic.bindings via cmake."
 WrapCmd {
   cmake `
     -G "MinGW Makefiles"  `
@@ -158,10 +161,14 @@ WrapCmd {
 }
 
 # Make nupic.core from non-debug configuration
+Write-Host "Building nupic.bindings."
 WrapCmd { cmake --build . --target install --config Release }
+
 popd
 
+
 # Create a python wheel in the destination wheelhouse
+Write-Host "Building nupic.bindings python wheel."
 WrapCmd { python setup.py bdist_wheel --dist-dir .\nupic_bindings_wheelhouse }
 
 #
@@ -169,9 +176,11 @@ WrapCmd { python setup.py bdist_wheel --dist-dir .\nupic_bindings_wheelhouse }
 #
 
 # Install nupic.bindings before running c++ tests; py_region_test depends on it
+Write-Host "Installing from built nupic.bindings wheel."
 WrapCmd { pip install --ignore-installed .\nupic_bindings_wheelhouse\nupic.bindings-*.whl }
 
 pushd .\build\release\bin
+Write-Host "Running nupic.core C++ tests."
 WrapCmd { connections_performance_test.exe }
 WrapCmd { cpp_region_test.exe }
 WrapCmd { helloregion.exe }
@@ -184,6 +193,8 @@ popd
 # So that py.test will deposit its artifacts in test_results
 mkdir .\test_results
 pushd .\test_results
+
+Write-Host "Running nupic.bindings python tests."
 
 WrapCmd { python ..\setup.py test }
 
