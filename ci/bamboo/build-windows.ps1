@@ -50,6 +50,26 @@
 $ErrorActionPreference = "Stop"
 
 
+# Use this function to wrap external commands to get powershell error-checking
+#
+# Usage: WrapCmd { cmd arg1 arg2 ... }
+#
+function WrapCmd
+{
+    [CmdletBinding()]
+    param (
+        [Parameter(Position=0, Mandatory=1)]
+        [scriptblock]$Command,
+        [Parameter(Position=1, Mandatory=0)]
+        [string]$ErrorMessage = "Command failed.`n$Command"
+    )
+    & $Command
+    if ($LastExitCode -ne 0) {
+        throw "Exec: $ErrorMessage"
+    }
+}
+
+
 # Remove sh.exe from the paths (CMake doesn't like it)
 Write-Host "ZZZ PATH=" $env:PATH
 Write-Host "ZZZ Looking for sh BEFORE cleaning PATH"
@@ -82,7 +102,7 @@ copy ".\external\windows64-gcc\bin\distutils.cfg" "$env:PYTHONHOME\Lib\distutils
 # Build nupic.core
 mkdir .\build\release
 mkdir .\build\scripts
-set NUPIC_DEPLOYMENT_BUILD=1
+$env:NUPIC_DEPLOYMENT_BUILD = 1
 
 pushd .\build\scripts
 
@@ -93,41 +113,43 @@ dir ..\..\src
 # ZZZ end diagnostics
 
 # Configure for non-debug build
-&cmake `
-  -G "MinGW Makefiles"  `
-  -DCMAKE_BUILD_TYPE=Release `
-  -DCMAKE_INSTALL_PREFIX=..\release `
-  -DPY_EXTENSIONS_DIR=..\..\bindings\py\nupic\bindings `
-  ..\..
+WrapCmd {
+  cmake `
+    -G "MinGW Makefiles"  `
+    -DCMAKE_BUILD_TYPE=Release `
+    -DCMAKE_INSTALL_PREFIX=..\release `
+    -DPY_EXTENSIONS_DIR=..\..\bindings\py\nupic\bindings `
+    ..\..
+}
 
 # Make nupic.core from non-debug configuration
-&cmake --build . --target install --config Release
+WrapCmd { cmake --build . --target install --config Release }
 popd
 
 # Create a python wheel in the destination wheelhouse
-&python setup.py bdist_wheel --dist-dir .\nupic_bindings_wheelhouse
+WrapCmd { python setup.py bdist_wheel --dist-dir .\nupic_bindings_wheelhouse }
 
 #
 # Run tests
 #
 
 # Install nupic.bindings before running c++ tests; py_region_test depends on it
-&pip install --ignore-installed .\nupic_bindings_wheelhouse\nupic.bindings-*.whl
+WrapCmd { pip install --ignore-installed .\nupic_bindings_wheelhouse\nupic.bindings-*.whl }
 
 pushd .\build\release\bin
-&connections_performance_test.exe
-&cpp_region_test.exe
-&helloregion.exe
-&hello_sp_tp.exe
-&prototest.exe
-&py_region_test.exe
-&unit_tests.exe
+WrapCmd { connections_performance_test.exe }
+WrapCmd { cpp_region_test.exe }
+WrapCmd { helloregion.exe }
+WrapCmd { hello_sp_tp.exe }
+WrapCmd { prototest.exe }
+WrapCmd { py_region_test.exe }
+WrapCmd { unit_tests.exe }
 popd
 
 # So that py.test will deposit its artifacts in test_results
 mkdir .\test_results
 pushd .\test_results
 
-&python ..\setup.py test
+WrapCmd { python ..\setup.py test }
 
 popd
