@@ -73,9 +73,10 @@ function WrapCmd
 # Remove sh.exe from the paths (CMake doesn't like it)
 Write-Host "ZZZ PATH=" $env:PATH
 Write-Host "ZZZ Looking for sh BEFORE cleaning PATH"
+
 &where.exe sh
-if ($LastExitCode -eq 0) {
-    throw "Failed to remove sh.exe from PATH."
+if ($LastExitCode -ne 0) {
+    throw "sh.exe wasn't in PATH."
 }
 
 Write-Host "ZZZ  cleaning PATH"
@@ -101,7 +102,7 @@ Write-Host "ZZZ DONE Looking for sh AFTER cleaning PATH"
 
 &where.exe patch
 if ($LastExitCode -eq 0) {
-    throw "Patch is already available."
+    throw "patch command was already available."
 }
 
 mkdir "C:\Program Files\PatchFromGit"
@@ -110,7 +111,7 @@ copy "C:\Program Files\Git\usr\bin\msys*.dll" "C:\Program Files\PatchFromGit"
 $env:PATH = 'C:\Program Files\PatchFromGit;' + $env:PATH
 &where.exe patch
 if ($LastExitCode -ne 0) {
-    throw "Failed to provide patch."
+    throw "Failed to provide patch command."
 }
 
 # Setup MinGW GCC as a valid distutils compiler
