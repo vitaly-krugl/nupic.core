@@ -57,6 +57,7 @@ $ErrorActionPreference = "Stop"
 function WrapCmd
 {
   [CmdletBinding()]
+
   param (
     [Parameter(Position=0, Mandatory=1)]
     [scriptblock]$Command,
@@ -75,7 +76,7 @@ function WrapCmd
 }
 
 
-WrapCmd { blahblahblah ZZZ }
+WrapCmd { where.exe ZZZ }
 
 # Remove sh.exe from the paths (CMake doesn't like it)
 Write-Host "ZZZ PATH=" $env:PATH
