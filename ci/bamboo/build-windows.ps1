@@ -66,6 +66,7 @@ function WrapCmd
   & $Command
   if ($LastExitCode -eq 0) {
     $? = $true
+  }
   else {
     #throw "WrapCmd: $ErrorMessage"
     Write-Host "WrapCmd: $ErrorMessage"
