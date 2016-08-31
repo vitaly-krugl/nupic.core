@@ -53,6 +53,9 @@ $NupicCoreRootDir = $(get-location).Path
 
 # Use this function to wrap external commands for powershell error-checking.
 #
+# This is necessary so that `$ErrorActionPreference = "Stop"` will have the
+# desired effect.
+#
 # Returns True if command's $LastExitCode was 0, False otherwise
 #
 # Usage: WrapCmd { cmd arg1 arg2 ... }
