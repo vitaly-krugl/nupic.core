@@ -96,7 +96,10 @@ NTA_DEF_NUMPY_DTYPE_TRAIT(nupic::Real64, NPY_FLOAT64);
 
 void NumpyArray::init()
 {
+  cerr << "ZZZ calling _import_array\n";
   int rc = _import_array();
+  cerr << "ZZZ returned from _import_array\n";
+
   if (rc < 0) {
     cerr << "ZZZ _import_array failed:" << rc <<"\n";
     throw std::runtime_error("NumpyArray::init(): "
