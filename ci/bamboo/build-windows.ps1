@@ -184,6 +184,7 @@ dir
 dir -Filter *.whl -Recurse | Select Fullname
 dir ".\nupic_bindings_wheelhouse"
 
+python -c "import numpy; print 'numpy version:', numpy.__version__"
 
 # Get path of nupic.bindings wheel
 $NupicBindingsWheel = `
