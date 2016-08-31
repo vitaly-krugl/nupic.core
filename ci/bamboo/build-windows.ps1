@@ -177,7 +177,7 @@ Write-Host "Installing from built nupic.bindings wheel."
 WrapCmd { pip --version }
 WrapCmd { wheel version }
 dir
-dir *.whl /b/s
+dir -Filter *.whl -Recurse | Select Fullname
 dir ".\nupic_bindings_wheelhouse"
 
 WrapCmd { pip install --ignore-installed ".\nupic_bindings_wheelhouse\nupic.bindings-*.wh"l }
