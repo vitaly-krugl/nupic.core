@@ -164,7 +164,7 @@ popd
 
 # Create a python wheel in the destination wheelhouse
 Write-Host "Building nupic.bindings python wheel."
-WrapCmd { python setup.py bdist_wheel --dist-dir .\nupic_bindings_wheelhouse }
+WrapCmd { python setup.py bdist_wheel --dist-dir ".\nupic_bindings_wheelhouse" }
 
 
 #
@@ -173,8 +173,13 @@ WrapCmd { python setup.py bdist_wheel --dist-dir .\nupic_bindings_wheelhouse }
 
 # Install nupic.bindings before running c++ tests; py_region_test depends on it
 Write-Host "Installing from built nupic.bindings wheel."
-dir .\nupic_bindings_wheelhouse
-WrapCmd { pip install --ignore-installed .\nupic_bindings_wheelhouse\nupic.bindings-*.whl }
+
+WrapCmd { pip --version }
+WrapCmd { wheel version }
+dir
+dir ".\nupic_bindings_wheelhouse"
+
+WrapCmd { pip install --ignore-installed ".\nupic_bindings_wheelhouse\nupic.bindings-*.wh"l }
 
 pushd .\build\release\bin
 Write-Host "Running nupic.core C++ tests."
