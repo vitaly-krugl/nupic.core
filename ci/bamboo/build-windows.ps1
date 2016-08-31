@@ -184,8 +184,16 @@ dir
 dir -Filter *.whl -Recurse | Select Fullname
 dir ".\nupic_bindings_wheelhouse"
 
-WrapCmd { pip install --ignore-installed ".\nupic_bindings_wheelhouse\nupic.bindings-*.whl" }
 
+# Get path of nupic.bindings wheel
+$NupicBindingsWheel = `
+  (Get-ChildItem .\nupic_bindings_wheelhouse\nupic.bindings-*.whl)[0].FullName
+
+# Install nupic.bindings
+WrapCmd { pip install --ignore-installed $NupicBindingsWheel }
+
+
+# Run C++ nupic.core tests
 pushd .\build\release\bin
 Write-Host "Running nupic.core C++ tests."
 WrapCmd { connections_performance_test.exe }
@@ -196,6 +204,9 @@ WrapCmd { prototest.exe }
 WrapCmd { py_region_test.exe }
 WrapCmd { unit_tests.exe }
 popd
+
+
+# Run python nupic.bindings tests
 
 # So that py.test will deposit its artifacts in test_results
 mkdir .\test_results
