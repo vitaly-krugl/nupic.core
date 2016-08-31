@@ -196,13 +196,13 @@ WrapCmd { pip install --ignore-installed $NupicBindingsWheel }
 # Run C++ nupic.core tests
 pushd .\build\release\bin
 Write-Host "Running nupic.core C++ tests."
-WrapCmd { connections_performance_test.exe }
-WrapCmd { cpp_region_test.exe }
-WrapCmd { helloregion.exe }
-WrapCmd { hello_sp_tp.exe }
-WrapCmd { prototest.exe }
-WrapCmd { py_region_test.exe }
-WrapCmd { unit_tests.exe }
+WrapCmd { .\connections_performance_test.exe }
+WrapCmd { .\cpp_region_test.exe }
+WrapCmd { .\helloregion.exe }
+WrapCmd { .\hello_sp_tp.exe }
+WrapCmd { .\prototest.exe }
+WrapCmd { .\py_region_test.exe }
+WrapCmd { .\unit_tests.exe }
 popd
 
 
