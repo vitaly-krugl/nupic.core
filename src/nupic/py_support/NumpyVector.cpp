@@ -98,6 +98,7 @@ void NumpyArray::init()
 {
   int rc = _import_array();
   if (rc < 0) {
+    cerr << "ZZZ _import_array failed:" << rc <<"\n";
     throw std::runtime_error("NumpyArray::init(): "
       "numpy.core.multiarray failed to import.");
   }
