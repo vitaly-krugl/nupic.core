@@ -150,7 +150,7 @@ WrapCmd { where.exe wheel }
 WrapCmd { wheel version }
 
 WrapCmd { python -c "import numpy; print 'numpy version:', numpy.__version__, numpy" }
-WrapCmd { python -c "import numpy.core.multiarray" }
+WrapCmd { python -c "import numpy.core.multiarray; print numpy.core.multiarray" }
 
 
 # Configure for non-debug build
@@ -197,7 +197,7 @@ dir -Filter *.whl -Recurse | Select Fullname
 dir ".\nupic_bindings_wheelhouse"
 
 WrapCmd { python -c "import numpy; print 'numpy version:', numpy.__version__, numpy" }
-WrapCmd { python -c "import numpy.core.multiarray" }
+WrapCmd { python -c "import numpy.core.multiarray; print numpy.core.multiarray" }
 
 # Get path of nupic.bindings wheel
 $NupicBindingsWheel = `
@@ -207,20 +207,7 @@ $NupicBindingsWheel = `
 WrapCmd { pip install $NupicBindingsWheel }
 
 WrapCmd { python -c "import numpy; print 'numpy version:', numpy.__version__, numpy" }
-WrapCmd { python -c "import numpy.core.multiarray" }
-
-
-# Run C++ nupic.core tests
-pushd .\build\release\bin
-Write-Host "Running nupic.core C++ tests."
-WrapCmd { .\connections_performance_test.exe }
-WrapCmd { .\cpp_region_test.exe }
-WrapCmd { .\helloregion.exe }
-WrapCmd { .\hello_sp_tp.exe }
-WrapCmd { .\prototest.exe }
-WrapCmd { .\py_region_test.exe }
-WrapCmd { .\unit_tests.exe }
-popd
+WrapCmd { python -c "import numpy.core.multiarray; print numpy.core.multiarray" }
 
 
 # Run python nupic.bindings tests
@@ -233,4 +220,17 @@ Write-Host "Running nupic.bindings python tests."
 
 WrapCmd { python ..\setup.py test }
 
+popd
+
+
+# Run C++ nupic.core tests
+pushd .\build\release\bin
+Write-Host "Running nupic.core C++ tests."
+WrapCmd { .\connections_performance_test.exe }
+WrapCmd { .\cpp_region_test.exe }
+WrapCmd { .\helloregion.exe }
+WrapCmd { .\hello_sp_tp.exe }
+WrapCmd { .\prototest.exe }
+WrapCmd { .\unit_tests.exe }
+WrapCmd { .\py_region_test.exe }
 popd
