@@ -49,6 +49,7 @@
 
 $ErrorActionPreference = "Stop"
 
+$NupicCoreRootDir = $(get-location).Path
 
 # Use this function to wrap external commands for powershell error-checking.
 #
@@ -164,7 +165,10 @@ popd
 
 # Create a python wheel in the destination wheelhouse
 Write-Host "Building nupic.bindings python wheel."
-WrapCmd { python setup.py bdist_wheel --dist-dir ".\nupic_bindings_wheelhouse" -vvvv }
+WrapCmd {
+  python setup.py bdist_wheel `
+    --dist-dir "$($NupicCoreRootDir)\nupic_bindings_wheelhouse"
+}
 
 
 #
@@ -180,7 +184,7 @@ dir
 dir -Filter *.whl -Recurse | Select Fullname
 dir ".\nupic_bindings_wheelhouse"
 
-WrapCmd { pip install --ignore-installed ".\nupic_bindings_wheelhouse\nupic.bindings-*.wh"l }
+WrapCmd { pip install --ignore-installed ".\nupic_bindings_wheelhouse\nupic.bindings-*.whl" }
 
 pushd .\build\release\bin
 Write-Host "Running nupic.core C++ tests."
