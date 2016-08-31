@@ -134,11 +134,23 @@ dir ..\..\src
 # ZZZ end diagnostics
 
 # Verify that gcc and g++ are available and log their location and version
-Write-Host "Checking that gcc and g++ are available."
+Write-Host "Checking tools."
 WrapCmd { where.exe gcc }
 WrapCmd { gcc --version }
 WrapCmd { where.exe g++ }
 WrapCmd { g++ --version }
+
+WrapCmd { where.exe python }
+WrapCmd { python --version }
+
+WrapCmd { where.exe pip }
+WrapCmd { pip --version }
+
+WrapCmd { where.exe wheel }
+WrapCmd { wheel version }
+
+WrapCmd { python -c "import numpy; print 'numpy version:', numpy.__version__, numpy" }
+WrapCmd { python -c "import numpy.core.multiarray" }
 
 
 # Configure for non-debug build
@@ -184,14 +196,18 @@ dir
 dir -Filter *.whl -Recurse | Select Fullname
 dir ".\nupic_bindings_wheelhouse"
 
-python -c "import numpy; print 'numpy version:', numpy.__version__"
+WrapCmd { python -c "import numpy; print 'numpy version:', numpy.__version__, numpy" }
+WrapCmd { python -c "import numpy.core.multiarray" }
 
 # Get path of nupic.bindings wheel
 $NupicBindingsWheel = `
   (Get-ChildItem .\nupic_bindings_wheelhouse\nupic.bindings-*.whl)[0].FullName
 
 # Install nupic.bindings
-WrapCmd { pip install --ignore-installed $NupicBindingsWheel }
+WrapCmd { pip install $NupicBindingsWheel }
+
+WrapCmd { python -c "import numpy; print 'numpy version:', numpy.__version__, numpy" }
+WrapCmd { python -c "import numpy.core.multiarray" }
 
 
 # Run C++ nupic.core tests
