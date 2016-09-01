@@ -116,6 +116,10 @@ install:
   - cd %NUPIC_CORE%\ci\appveyor
   - ps: .\install_python_pip.ps1
 
+  # ZZZ see what's in appveyor's C:\Python27-x64\libs to help debug bamboo build
+  # Remove from source!
+  - dir "%PYTHONHOME%\libs"
+
   #
   # Install mingwpy toolchain
   #
