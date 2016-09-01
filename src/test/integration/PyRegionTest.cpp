@@ -449,6 +449,7 @@ int realmain(bool leakTest)
   Network::registerPyRegion("nupic.bindings.regions.TestNode", "TestNode");
   std::cerr << "ZZZ returned from Network::registerPyRegion..." << std::endl;
 
+  std::cerr << "ZZZ calling n.addRegion..." << std::endl;
   Region* level2 = n.addRegion("level2", "py.TestNode", "{int32Param: 444}");
   std::cerr << "ZZZ returned from n.addRegion..." << std::endl;
 
