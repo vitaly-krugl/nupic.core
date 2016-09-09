@@ -63,7 +63,9 @@ namespace nupic
     // Set region info before creating the RegionImpl so that the
     // Impl has access to the region info in its constructor.
     RegionImplFactory & factory = RegionImplFactory::getInstance();
+    std::cerr << "ZZZ calling factory.getSpec..." << std::endl;
     spec_ = factory.getSpec(nodeType);
+    std::cerr << "ZZZ returned from factory.getSpec" << std::endl;
 
     // Dimensions start off as unspecified, but if
     // the RegionImpl only supports a single node, we

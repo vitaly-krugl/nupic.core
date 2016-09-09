@@ -122,7 +122,9 @@ Region* Network::addRegion(const std::string& name,
   if (regions_.contains(name))
     NTA_THROW << "Region with name '" << name << "' already exists in network";
 
+  std::cerr << "ZZZ calling Region constructor..." << std::endl;
   auto r = new Region(name, nodeType, nodeParams, this);
+  std::cerr << "ZZZ returned from Region constructor" << std::endl;
   regions_.add(name, r);
   initialized_ = false;
 

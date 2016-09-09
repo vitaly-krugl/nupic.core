@@ -86,7 +86,7 @@ namespace nupic
   {
     if (cppRegions.find(name) != cppRegions.end())
     {
-      NTA_WARN << "A CPPRegion already exists with the name '" 
+      NTA_WARN << "A CPPRegion already exists with the name '"
                << name << "'. Overwriting it...";
     }
     cppRegions[name] = wrapper;
@@ -140,7 +140,9 @@ namespace nupic
       createSpec_ = (createSpecFunc) PyRegion::NTA_createSpec;
       destroySpec_ = (destroySpecFunc) PyRegion::NTA_destroySpec;
 
+      std::cerr << "ZZZ calling initPython_..." << std::endl;
       (*initPython_)();
+      std::cerr << "ZZZ returned from initPython_" << std::endl;
     }
 
     ~DynamicPythonLibrary()
@@ -420,10 +422,16 @@ static Spec * getPySpec(DynamicPythonLibrary * pyLib,
     if (classes.find(className) != classes.end())
     {
       void * exception = nullptr;
+      std::cerr << "ZZZ calling pyLib->createSpec..." << std::endl;
       void * ns = pyLib->createSpec(module, &exception, className);
+      std::cerr << "ZZZ returned from pyLib->createSpec" << std::endl;
       if (ns)
       {
         return (Spec *)ns;
+      }
+      else
+      {
+       std::cerr << "ZZZ pyLib->createSpec failed" << std::endl;
       }
     }
   }
