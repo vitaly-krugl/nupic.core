@@ -187,7 +187,7 @@ after_build:
   - cd %NUPIC_CORE%
   # Install the newly-built nupic.bindings wheel before running binary tests;
   # py_region_test.exe depends on it
-  - ps: &pip install .\bindings\py\dist\nupic.bindings-$env:BINDINGS_VERSION-cp27-none-$env:wheel_name_suffix.whl
+  - ps: pip install .\bindings\py\dist\nupic.bindings-$env:BINDINGS_VERSION-cp27-none-$env:wheel_name_suffix.whl
 
 
   # legacy binary tests
