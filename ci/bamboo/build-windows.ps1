@@ -120,6 +120,35 @@ copy "C:\Program Files\Git\usr\bin\msys*.dll" "C:\Program Files\PatchFromGit"
 $env:PATH = 'C:\Program Files\PatchFromGit;' + $env:PATH
 WrapCmd { where.exe patch }
 
+
+# Verify that gcc and g++ are available and log their location and version
+Write-Host "Checking tools."
+WrapCmd { where.exe gcc }
+WrapCmd { gcc --version }
+WrapCmd { where.exe g++ }
+WrapCmd { g++ --version }
+
+WrapCmd { where.exe python }
+WrapCmd { python --version }
+
+Write-Host "PYTHONHOME=$env:PYTHONHOME"
+Write-Host "PYTHONPATH=$env:PYTHONPATH"
+
+WrapCmd { where.exe pip }
+WrapCmd { pip --version }
+
+WrapCmd { where.exe wheel }
+WrapCmd { wheel version }
+
+WrapCmd { python -c "import numpy; print 'numpy version:', numpy.__version__, numpy" }
+WrapCmd { python -c "import numpy.core.multiarray; print numpy.core.multiarray" }
+
+WrapCmd { pip list }
+
+# Dump env vars
+Get-ChildItem Env:
+
+
 # Setup MinGW GCC as a valid distutils compiler
 copy ".\external\windows64-gcc\bin\distutils.cfg" "$env:PYTHONHOME\Lib\distutils.cfg"
 
@@ -135,25 +164,6 @@ dir ..\..
 dir ..\..\external
 dir ..\..\src
 # ZZZ end diagnostics
-
-# Verify that gcc and g++ are available and log their location and version
-Write-Host "Checking tools."
-WrapCmd { where.exe gcc }
-WrapCmd { gcc --version }
-WrapCmd { where.exe g++ }
-WrapCmd { g++ --version }
-
-WrapCmd { where.exe python }
-WrapCmd { python --version }
-
-WrapCmd { where.exe pip }
-WrapCmd { pip --version }
-
-WrapCmd { where.exe wheel }
-WrapCmd { wheel version }
-
-WrapCmd { python -c "import numpy; print 'numpy version:', numpy.__version__, numpy" }
-WrapCmd { python -c "import numpy.core.multiarray; print numpy.core.multiarray" }
 
 
 # Configure for non-debug build

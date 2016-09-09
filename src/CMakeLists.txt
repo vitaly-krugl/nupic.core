@@ -138,6 +138,9 @@ execute_process(COMMAND "${PYTHON_EXECUTABLE}" "-c"
 # Quick way to fixup directory paths to NumPy
 get_filename_component(src_numpy_core ${src_numpy_core}/include/.. ABSOLUTE)
 
+message(STATUS "src_numpy_core   = ${src_numpy_core}")
+
+
 #
 # Setup include paths
 #
@@ -158,6 +161,8 @@ set(CMAKE_PREFIX_PATH ${CMAKE_PREFIX_PATH}
                       ${REPOSITORY_DIR}/external/common/
                       ${REPOSITORY_DIR}/external/${PLATFORM}${BITNESS}${PLATFORM_SUFFIX}/
                       ${src_numpy_core}/)
+
+message(STATUS "CMAKE_PREFIX_PATH   = ${CMAKE_PREFIX_PATH}")
 
 #
 # Extract current git sha and record in nupic/Version.hpp
