@@ -98,18 +98,6 @@ install:
   - set PYTHONPATH=%PYTHONHOME%
   - set PATH=%PYTHONHOME%\Scripts;%PYTHONHOME%;%PATH%
 
-  # Make unix-compatible patch.exe available to the build by copying it from
-  # Git\usr\bin (that we remove from PATH) to another directory and adding it to
-  # PATH; the reason we copy it is that logic below removes
-  # C:\Program Files\Git\usr\bin from Path to avoid build issue resulting from
-  # sh.exe being on the path.
-  - mkdir "C:\Program Files\PatchFromGit"
-  - ps: copy "C:\Program Files\Git\usr\bin\patch.exe" "C:\Program Files\PatchFromGit"
-  - ps: copy "C:\Program Files\Git\usr\bin\msys*.dll" "C:\Program Files\PatchFromGit"
-  - set PATH=C:\Program Files\PatchFromGit;%PATH%
-
-  - echo %PATH%
-
   #
   # Install Python 2.7.x, Pip, Wheel, and NumPy
   #
@@ -143,19 +131,29 @@ install:
   # Check NumPy, etc. installed correctly
   - cmd: pip list
 
-  - cd %NUPIC_CORE%
-  - mkdir %NUPIC_CORE%\build\
-  - mkdir %NUPIC_CORE%\build\release
-  - mkdir %NUPIC_CORE%\build\scripts
+  # Make unix-compatible patch.exe available to the build by copying it from
+  # Git\usr\bin (that we remove from PATH) to another directory and adding it to
+  # PATH; the reason we copy it is that logic below removes
+  # C:\Program Files\Git\usr\bin from Path to avoid build issue resulting from
+  # sh.exe being on the path.
+  - mkdir "C:\Program Files\PatchFromGit"
+  - ps: copy "C:\Program Files\Git\usr\bin\patch.exe" "C:\Program Files\PatchFromGit"
+  - ps: copy "C:\Program Files\Git\usr\bin\msys*.dll" "C:\Program Files\PatchFromGit"
+  - set PATH=C:\Program Files\PatchFromGit;%PATH%
 
   # Remove sh.exe from the paths (CMake doesn't like it)
   - set PATH=%PATH:C:\Program Files (x86)\Git\bin;=%
   - set PATH=%PATH:C:\Program Files\Git\usr\bin;=%
   - set PATH=%PATH:C:\MinGW\msys\1.0\bin;=%
 
+  - echo %PATH%
 
   # Verify that patch command is available
   - "where patch"
+
+  - mkdir %NUPIC_CORE%\build\
+  - mkdir %NUPIC_CORE%\build\release
+  - mkdir %NUPIC_CORE%\build\scripts
 
   # Fake KJ-Async and Capnp-RPC libs, not needed in Lite mode
   # http://www.cmake.org/Wiki/CmakeMingw
@@ -186,16 +184,24 @@ build_script:
   - ps: copy .\nupic.bindings-$env:BINDINGS_VERSION-cp27-none-$env:wheel_name_suffix.whl .\nupic.bindings-$env:BINDINGS_VERSION.$env:APPVEYOR_REPO_COMMIT-cp27-none-$env:wheel_name_suffix.whl
 
 after_build:
-  - mkdir %ARTIFACTS_DIR%
+  - cd %NUPIC_CORE%
+  # Install the newly-built nupic.bindings wheel before running binary tests;
+  # py_region_test.exe depends on it
+  - ps: &pip install .\bindings\py\dist\nupic.bindings-$env:BINDINGS_VERSION-cp27-none-$env:wheel_name_suffix.whl
+
 
   # legacy binary tests
   - cd %NUPIC_CORE%\build\release\bin
+  - mkdir %ARTIFACTS_DIR%
+
+  - py_region_test.exe
   - connections_performance_test.exe
   - cpp_region_test.exe
   - helloregion.exe
   - hello_sp_tp.exe
   - prototest.exe
   - unit_tests.exe --gtest_output=xml:%ARTIFACTS_DIR%\unit_tests_report.xml
+
   - cd %NUPIC_CORE%
   - python setup.py test
 
