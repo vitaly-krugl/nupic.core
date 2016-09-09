@@ -100,6 +100,7 @@ extern "C"
         std::cerr << "ZZZ Py_GetVersion(): " << Py_GetVersion() << std::endl;
         std::cerr << "ZZZ Py_GetPath(): " << Py_GetPath() << std::endl;
 
+
         // import_array1 is a macro that returns its arg on failure. It was
         // really intended to be called directly from the python extension's
         // init function; it also calls PyErr_SetString(PyExc_ImportError, ...)
