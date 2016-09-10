@@ -497,12 +497,13 @@ add_custom_target(tests_py_region
 #
 # Setup test_numpy_import
 #
-set(src_executable_numpyimporttest test_numpy_import)
-add_executable(${src_executable_numpyimporttest} test/integration/ImportNumpyTest.cpp)
-target_link_libraries(${src_executable_numpyimporttest} ${src_common_test_exe_libs})
-set_target_properties(${src_executable_numpyimporttest}
+set(src_executable_importnumpytest test_import_numpy)
+add_executable(${src_executable_importnumpytest} test/integration/ImportNumpyTest.cpp)
+#target_link_libraries(${src_executable_importnumpytest} ${src_common_test_exe_libs})
+target_link_libraries(${src_executable_importnumpytest} "C:/Windows/System32/python27.dll")
+set_target_properties(${src_executable_importnumpytest}
                       PROPERTIES COMPILE_FLAGS ${src_compile_flags})
-set_target_properties(${src_executable_numpyimporttest}
+set_target_properties(${src_executable_importnumpytest}
                       PROPERTIES LINK_FLAGS "${INTERNAL_LINKER_FLAGS_OPTIMIZED}")
 
 #
@@ -864,6 +865,7 @@ install(TARGETS
         ${src_executable_helloregion}
         ${src_executable_cppregiontest}
         ${src_executable_pyregiontest}
+        ${src_executable_importnumpytest}
         ${src_executable_connectionsperformancetest}
         ${src_executable_hellosptp}
         ${src_executable_prototest}
