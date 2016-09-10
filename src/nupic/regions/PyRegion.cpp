@@ -71,7 +71,9 @@ extern "C"
     if (!Py_IsInitialized())
     {
       //NTA_DEBUG << "Called Py_Initialize()";
+      std::cerr << "ZZZ Calling Py_Initialize..." << std::endl;
       Py_Initialize();
+      std::cerr << "ZZZ Returned from Py_Initialize..." << std::endl;
       NTA_ASSERT(Py_IsInitialized());
       finalizePython = true;
     }
@@ -87,43 +89,27 @@ extern "C"
     // conditional block because Python may already be initialized if used
     // through the Python bindings.
 
-    // Initialize numpy.
-    struct ArrayImporter {
+    std::cerr << "ZZZ Py_GetPythonHome(): " << Py_GetPythonHome() << std::endl;
+    std::cerr << "ZZZ Py_GetProgramName(): " << Py_GetProgramName() << std::endl;
+    std::cerr << "ZZZ Py_GetProgramFullPath(): " << Py_GetProgramFullPath() << std::endl;
+    std::cerr << "ZZZ Py_GetBuildInfo(): " << Py_GetBuildInfo() << std::endl;
+    std::cerr << "ZZZ Py_GetCompiler(): " << Py_GetCompiler() << std::endl;
+    std::cerr << "ZZZ Py_GetPlatform(): " << Py_GetPlatform() << std::endl;
+    std::cerr << "ZZZ Py_GetVersion(): " << Py_GetVersion() << std::endl;
+    std::cerr << "ZZZ Py_GetPath(): " << Py_GetPath() << std::endl;
 
-      // Initialize numpy array; returns 0 on success
-      static int importArray()
-      {
-        std::cerr << "ZZZ Py_GetPythonHome(): " << Py_GetPythonHome() << std::endl;
-        std::cerr << "ZZZ Py_GetProgramName(): " << Py_GetProgramName() << std::endl;
-        std::cerr << "ZZZ Py_GetProgramFullPath(): " << Py_GetProgramFullPath() << std::endl;
-        std::cerr << "ZZZ Py_GetBuildInfo(): " << Py_GetBuildInfo() << std::endl;
-        std::cerr << "ZZZ Py_GetCompiler(): " << Py_GetCompiler() << std::endl;
-        std::cerr << "ZZZ Py_GetPlatform(): " << Py_GetPlatform() << std::endl;
-        std::cerr << "ZZZ Py_GetVersion(): " << Py_GetVersion() << std::endl;
-        std::cerr << "ZZZ Py_GetPath(): " << Py_GetPath() << std::endl;
-
-
-        // import_array1 is a macro that returns its arg on failure, and has no
-        // return on success. It was really intended to be called directly from
-        // the python extension's init function; it also calls
-        // PyErr_SetString(PyExc_ImportError, ...),
-        // which would cause python to raise the ImportError exception.
-        std::cerr << "ZZZ calling import_array..." << std::endl;
-        import_array1(-1);
-        std::cerr << "ZZZ returned from import_array" << std::endl;
-
-        // Success
-        return 0;
-      }
-    };
-
-    if (ArrayImporter::importArray() != 0)
+    // NOTE we use the function _import_array directly (just like in
+    // NumpyVector.cpp), because import_array is a macro that incorporates a
+    // return statement on failure, intended to be used directly in
+    // a python extension's init function.
+    std::cerr << "ZZZ calling _import_array..." << std::endl;
+    if (_import_array() != 0)
     {
-      std::cerr << "ZZZ ArrayImporter::importArray FAILED" << std::endl;
+      std::cerr << "ZZZ numpy _import_array FAILED" << std::endl;
 
-      NTA_THROW << "numpy import_array failed";
+      NTA_THROW << "numpy _import_array failed";
     }
-
+    std::cerr << "ZZZ returned from _import_array" << std::endl;
   }
 
   // NTA_finalizePython() must be called before unloading the pynode dynamic library
