@@ -431,7 +431,9 @@ static Spec * getPySpec(DynamicPythonLibrary * pyLib,
       }
       else
       {
-       std::cerr << "ZZZ pyLib->createSpec failed" << std::endl;
+        NTA_WARN << "pyLib->createSpec failed: exception=" << exception;
+
+        std::cerr << "ZZZ pyLib->createSpec failed" << std::endl;
       }
     }
   }
