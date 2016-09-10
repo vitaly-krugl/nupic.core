@@ -463,6 +463,8 @@ if (NUPIC_BUILD_PYEXT_MODULES)
   list(APPEND src_common_test_exe_libs ${CAPNP_STATIC_LIB_TARGET})
 endif()
 
+message(STATUS "src_common_test_exe_libs = ${src_common_test_exe_libs}")
+
 
 #
 # Setup test_cpp_region
@@ -500,7 +502,9 @@ add_custom_target(tests_py_region
 set(src_executable_importnumpytest test_import_numpy)
 add_executable(${src_executable_importnumpytest} test/integration/ImportNumpyTest.cpp)
 #target_link_libraries(${src_executable_importnumpytest} ${src_common_test_exe_libs})
-target_link_libraries(${src_executable_importnumpytest} ${PYTHON_LIBRARIES})
+target_link_libraries(${src_executable_importnumpytest}
+                      ${PYTHON_LIBRARIES}
+                      ${src_common_os_libs})
 set_target_properties(${src_executable_importnumpytest}
                       PROPERTIES COMPILE_FLAGS ${src_compile_flags})
 set_target_properties(${src_executable_importnumpytest}
