@@ -240,9 +240,9 @@ popd
 pushd .\build\release\bin
 Write-Host "Running nupic.core C++ tests."
 
-Write-Host "ZZZ Running test_import_numpy.exe..."
-WrapCmd { .\test_import_numpy.exe }
-Write-Host "ZZZ Completed test_import_numpy.exe"
+Write-Host "ZZZ Running import_numpy_test.exe..."
+WrapCmd { .\import_numpy_test.exe }
+Write-Host "ZZZ Completed import_numpy_test.exe"
 
 WrapCmd { .\py_region_test.exe }
 WrapCmd { .\connections_performance_test.exe }

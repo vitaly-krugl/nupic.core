@@ -499,12 +499,12 @@ add_custom_target(tests_py_region
 #
 # Setup test_numpy_import
 #
-set(src_executable_importnumpytest test_import_numpy)
+set(src_executable_importnumpytest import_numpy_test)
 add_executable(${src_executable_importnumpytest} test/integration/ImportNumpyTest.cpp)
-#target_link_libraries(${src_executable_importnumpytest} ${src_common_test_exe_libs})
-target_link_libraries(${src_executable_importnumpytest}
-                      ${PYTHON_LIBRARIES}
-                      ${src_common_os_libs})
+target_link_libraries(${src_executable_importnumpytest} ${src_common_test_exe_libs})
+#target_link_libraries(${src_executable_importnumpytest} THIS PASSED
+#                      ${PYTHON_LIBRARIES}
+#                      ${src_common_os_libs})
 set_target_properties(${src_executable_importnumpytest}
                       PROPERTIES COMPILE_FLAGS ${src_compile_flags})
 set_target_properties(${src_executable_importnumpytest}
