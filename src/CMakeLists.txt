@@ -495,6 +495,17 @@ add_custom_target(tests_py_region
                   VERBATIM)
 
 #
+# Setup test_numpy_import
+#
+set(src_executable_numpyimporttest test_numpy_import)
+add_executable(${src_executable_numpyimporttest} test/integration/ImportNumpyTest.cpp)
+target_link_libraries(${src_executable_numpyimporttest} ${src_common_test_exe_libs})
+set_target_properties(${src_executable_numpyimporttest}
+                      PROPERTIES COMPILE_FLAGS ${src_compile_flags})
+set_target_properties(${src_executable_numpyimporttest}
+                      PROPERTIES LINK_FLAGS "${INTERNAL_LINKER_FLAGS_OPTIMIZED}")
+
+#
 # Setup test_connections_performance
 #
 set(src_executable_connectionsperformancetest connections_performance_test)
