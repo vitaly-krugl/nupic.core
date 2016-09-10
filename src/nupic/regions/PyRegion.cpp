@@ -89,6 +89,8 @@ extern "C"
 
     // Initialize numpy.
     struct ArrayImporter {
+
+      // Initialize numpy array; returns 0 on success
       static int importArray()
       {
         std::cerr << "ZZZ Py_GetPythonHome(): " << Py_GetPythonHome() << std::endl;
@@ -101,9 +103,10 @@ extern "C"
         std::cerr << "ZZZ Py_GetPath(): " << Py_GetPath() << std::endl;
 
 
-        // import_array1 is a macro that returns its arg on failure. It was
-        // really intended to be called directly from the python extension's
-        // init function; it also calls PyErr_SetString(PyExc_ImportError, ...)
+        // import_array1 is a macro that returns its arg on failure, and has no
+        // return on success. It was really intended to be called directly from
+        // the python extension's init function; it also calls
+        // PyErr_SetString(PyExc_ImportError, ...),
         // which would cause python to raise the ImportError exception.
         std::cerr << "ZZZ calling import_array..." << std::endl;
         import_array1(-1);
@@ -117,7 +120,8 @@ extern "C"
     if (ArrayImporter::importArray() != 0)
     {
       std::cerr << "ZZZ ArrayImporter::importArray FAILED" << std::endl;
-      // TODO Should raise an exception
+
+      NTA_THROW << "numpy import_array failed";
     }
 
   }
