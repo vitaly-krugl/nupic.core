@@ -101,7 +101,7 @@ extern "C"
     // NOTE we use the function _import_array directly (just like in
     // NumpyVector.cpp), because import_array is a macro that incorporates a
     // return statement on failure, intended to be used directly in
-    // a python extension's init function.
+    // a python extension's init function rather than deeply nested.
     std::cerr << "ZZZ calling _import_array..." << std::endl;
     if (_import_array() != 0)
     {

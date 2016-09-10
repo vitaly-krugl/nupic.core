@@ -25,16 +25,20 @@
 */
 
 
-#include <assert.h>
+//#include <assert.h>
+
 #include <iostream>
-#define NPY_NO_DEPRECATED_API NPY_1_7_API_VERSION
-#include <Python.h>
-#include <numpy/arrayobject.h>
+
+//#define NPY_NO_DEPRECATED_API NPY_1_7_API_VERSION
+//#include <Python.h>
+//#include <numpy/arrayobject.h>
+
+#include <nupic/regions/PyRegion.hpp>
 
 
 int main(int argc, char*argv[])
 {
-
+  /* This passes on Windows, so we'll try via PyRegion next
   if (!Py_IsInitialized())
   {
     std::cerr << "ZZZ Calling Py_Initialize..." << std::endl;
@@ -48,5 +52,9 @@ int main(int argc, char*argv[])
   import_array1(-1);
   std::cerr << "ZZZ Returned from import_array1" << std::endl;
 
+  return 0;
+  */
+
+  nupic::PyRegion::NTA_initPython();
   return 0;
 }
