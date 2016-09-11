@@ -33,10 +33,14 @@
 //#include <Python.h>
 //#include <numpy/arrayobject.h>
 
-#include <nupic/engine/Network.hpp>
-#include <nupic/engine/NuPIC.hpp>
+//#include <nupic/engine/Network.hpp>
+//#include <nupic/engine/NuPIC.hpp>
 //#include <nupic/regions/PyRegion.hpp>
-#include <nupic/engine/Region.hpp>
+
+//#include <nupic/engine/Region.hpp>
+
+#include <nupic/engine/RegionImplFactory.hpp>
+
 
 
 int main(int argc, char*argv[])
@@ -58,6 +62,7 @@ int main(int argc, char*argv[])
   return 0;
   */
 
+
   /* This passed on Windows, too
   nupic::PyRegion::NTA_initPython();
 
@@ -67,6 +72,9 @@ int main(int argc, char*argv[])
   return 0;
   */
 
+
+  /* This is sufficient to reproduce on Windows:
+     "ImportError: numpy.core.multiarray failed to import":
 
   //std::cerr << "ZZZ calling NuPIC::init..." << std::endl;
   //nupic::NuPIC::init();
@@ -81,6 +89,13 @@ int main(int argc, char*argv[])
   std::cerr << "ZZZ calling n.addRegion..." << std::endl;
   nupic::Region* level2 = n.addRegion("level2", "py.TestNode", "{int32Param: 444}");
   std::cerr << "ZZZ returned from n.addRegion" << std::endl;
+  */
+
+  // From Region:Region(name, nodeType, nodeParams, *network)
+  nupic::RegionImplFactory & factory = nupic::RegionImplFactory::getInstance();
+  std::cerr << "ZZZ calling factory.getSpec..." << std::endl;
+  factory.getSpec("py.TestNode");
+  std::cerr << "ZZZ returned from factory.getSpec" << std::endl;
 
   return 0;
 }

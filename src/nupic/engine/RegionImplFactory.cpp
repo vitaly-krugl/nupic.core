@@ -431,9 +431,7 @@ static Spec * getPySpec(DynamicPythonLibrary * pyLib,
       }
       else
       {
-        NTA_WARN << "pyLib->createSpec failed: exception=" << exception;
-
-        std::cerr << "ZZZ pyLib->createSpec failed" << std::endl;
+        std::cerr << "ZZZ pyLib->createSpec failed: exception=" << exception << std::endl;
       }
     }
   }
@@ -459,7 +457,10 @@ Spec * RegionImplFactory::getSpec(const std::string nodeType)
   else if (nodeType.find(std::string("py.")) == 0)
   {
     if (!pyLib_)
+      std::cerr << "ZZZ calling boost::shared_ptr<DynamicPythonLibrary>..." << std::endl;
+      // NOTE: shared_ptr is now part of the C++11 Standard, as std::shared_ptr
       pyLib_ = boost::shared_ptr<DynamicPythonLibrary>(new DynamicPythonLibrary());
+      std::cerr << "ZZZ returned from boost::shared_ptr<DynamicPythonLibrary>" << std::endl;
 
     ns = getPySpec(pyLib_.get(), nodeType);
   }
