@@ -23,6 +23,7 @@
 #include <nupic/regions/PyRegion.hpp>
 #define NPY_NO_DEPRECATED_API NPY_1_7_API_VERSION
 #include <numpy/arrayobject.h>
+#include <Python.h>
 #include <iostream>
 #include <sstream>
 #include <memory>
@@ -105,6 +106,8 @@ extern "C"
     std::cerr << "ZZZ calling _import_array..." << std::endl;
     if (_import_array() != 0)
     {
+      PyErr_Print();
+
       std::cerr << "ZZZ numpy _import_array FAILED" << std::endl;
 
       NTA_THROW << "numpy _import_array failed";

@@ -68,9 +68,9 @@ int main(int argc, char*argv[])
   */
 
 
-  std::cerr << "ZZZ calling NuPIC::init..." << std::endl;
-  nupic::NuPIC::init();
-  std::cerr << "ZZZ returned from NuPIC::init" << std::endl;
+  //std::cerr << "ZZZ calling NuPIC::init..." << std::endl;
+  //nupic::NuPIC::init();
+  //std::cerr << "ZZZ returned from NuPIC::init" << std::endl;
 
   //std::cerr << "ZZZ calling Network::registerPyRegion..." << std::endl;
   //nupic::Network::registerPyRegion("nupic.bindings.regions.TestNode", "TestNode");
