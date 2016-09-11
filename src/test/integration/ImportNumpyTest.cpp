@@ -56,5 +56,9 @@ int main(int argc, char*argv[])
   */
 
   nupic::PyRegion::NTA_initPython();
+
+  // Try one more time to see if import_array will fail
+  nupic::PyRegion::NTA_initPython();
+
   return 0;
 }
