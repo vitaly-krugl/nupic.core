@@ -72,11 +72,11 @@ int main(int argc, char*argv[])
   nupic::NuPIC::init();
   std::cerr << "ZZZ returned from NuPIC::init" << std::endl;
 
-  nupic::Network n;
+  //std::cerr << "ZZZ calling Network::registerPyRegion..." << std::endl;
+  //nupic::Network::registerPyRegion("nupic.bindings.regions.TestNode", "TestNode");
+  //std::cerr << "ZZZ returned from Network::registerPyRegion" << std::endl;
 
-  std::cerr << "ZZZ calling Network::registerPyRegion..." << std::endl;
-  nupic::Network::registerPyRegion("nupic.bindings.regions.TestNode", "TestNode");
-  std::cerr << "ZZZ returned from Network::registerPyRegion" << std::endl;
+  nupic::Network n;
 
   std::cerr << "ZZZ calling n.addRegion..." << std::endl;
   nupic::Region* level2 = n.addRegion("level2", "py.TestNode", "{int32Param: 444}");
