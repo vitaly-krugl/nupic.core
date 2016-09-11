@@ -33,7 +33,10 @@
 //#include <Python.h>
 //#include <numpy/arrayobject.h>
 
-#include <nupic/regions/PyRegion.hpp>
+#include <nupic/engine/Network.hpp>
+#include <nupic/engine/NuPIC.hpp>
+//#include <nupic/regions/PyRegion.hpp>
+#include <nupic/engine/Region.hpp>
 
 
 int main(int argc, char*argv[])
@@ -55,10 +58,29 @@ int main(int argc, char*argv[])
   return 0;
   */
 
+  /* This passed on Windows, too
   nupic::PyRegion::NTA_initPython();
 
   // Try one more time to see if import_array will fail
   nupic::PyRegion::NTA_initPython();
+
+  return 0;
+  */
+
+
+  std::cerr << "ZZZ calling NuPIC::init..." << std::endl;
+  nupic::NuPIC::init();
+  std::cerr << "ZZZ returned from NuPIC::init" << std::endl;
+
+  nupic::Network n;
+
+  std::cerr << "ZZZ calling Network::registerPyRegion..." << std::endl;
+  nupic::Network::registerPyRegion("nupic.bindings.regions.TestNode", "TestNode");
+  std::cerr << "ZZZ returned from Network::registerPyRegion" << std::endl;
+
+  std::cerr << "ZZZ calling n.addRegion..." << std::endl;
+  nupic::Region* level2 = n.addRegion("level2", "py.TestNode", "{int32Param: 444}");
+  std::cerr << "ZZZ returned from n.addRegion" << std::endl;
 
   return 0;
 }
