@@ -137,6 +137,7 @@ int main(int argc, char*argv[])
   */
 
 
+  /* Totally successful, similarly to direct factory.getSpec call above
   std::cerr << "ZZZ calling Network::registerPyRegion..." << std::endl;
   nupic::Network::registerPyRegion("nupic.bindings.regions.TestNode", "TestNode");
   std::cerr << "ZZZ returned from Network::registerPyRegion" << std::endl;
@@ -144,6 +145,14 @@ int main(int argc, char*argv[])
   // From Network::addRegion
   auto r = new nupic::Region("level2", "py.TestNode", "{int32Param: 444}");
   r = r;
+  */
+
+  // Back to n.addRegion, but with Py_Finalize instrumented in PyRegion.cpp
+  nupic::Network n;
+
+  std::cerr << "ZZZ calling n.addRegion..." << std::endl;
+  nupic::Region* level2 = n.addRegion("level2", "py.TestNode", "{int32Param: 444}");
+  std::cerr << "ZZZ returned from n.addRegion" << std::endl;
 
   return 0;
 }
