@@ -33,7 +33,7 @@
 //#include <Python.h>
 //#include <numpy/arrayobject.h>
 
-//#include <nupic/engine/Network.hpp>
+#include <nupic/engine/Network.hpp>
 //#include <nupic/engine/NuPIC.hpp>
 //#include <nupic/regions/PyRegion.hpp>
 
@@ -91,8 +91,25 @@ int main(int argc, char*argv[])
   std::cerr << "ZZZ returned from n.addRegion" << std::endl;
   */
 
+  /* This one succeeded on _import_array, but failed later (probably because
+     region wasn't registered)
+     ERR:  Matching Python module for TestNode not found.
   // From Region:Region(name, nodeType, nodeParams, *network)
   nupic::RegionImplFactory & factory = nupic::RegionImplFactory::getInstance();
+  std::cerr << "ZZZ calling factory.getSpec..." << std::endl;
+  factory.getSpec("py.TestNode");
+  std::cerr << "ZZZ returned from factory.getSpec" << std::endl;
+  */
+
+  std::cerr << "ZZZ calling Network::registerPyRegion..." << std::endl;
+  nupic::Network::registerPyRegion("nupic.bindings.regions.TestNode", "TestNode");
+  std::cerr << "ZZZ returned from Network::registerPyRegion" << std::endl;
+
+  // From Region:Region(name, nodeType, nodeParams, *network)
+  std::cerr << "ZZZ calling RegionImplFactory::getInstance..." << std::endl;
+  nupic::RegionImplFactory & factory = nupic::RegionImplFactory::getInstance();
+  std::cerr << "ZZZ returned from RegionImplFactory::getInstance" << std::endl;
+
   std::cerr << "ZZZ calling factory.getSpec..." << std::endl;
   factory.getSpec("py.TestNode");
   std::cerr << "ZZZ returned from factory.getSpec" << std::endl;
