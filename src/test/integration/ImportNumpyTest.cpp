@@ -37,9 +37,9 @@
 //#include <nupic/engine/NuPIC.hpp>
 //#include <nupic/regions/PyRegion.hpp>
 
-//#include <nupic/engine/Region.hpp>
+#include <nupic/engine/Region.hpp>
 
-#include <nupic/engine/RegionImplFactory.hpp>
+//#include <nupic/engine/RegionImplFactory.hpp>
 
 
 
@@ -73,7 +73,7 @@ int main(int argc, char*argv[])
   */
 
 
-  /* This is sufficient to reproduce on Windows:
+  /* This is sufficient to reproduce on Windows (from PyRegionTest.cpp):
      "ImportError: numpy.core.multiarray failed to import":
 
   //std::cerr << "ZZZ calling NuPIC::init..." << std::endl;
@@ -101,6 +101,8 @@ int main(int argc, char*argv[])
   std::cerr << "ZZZ returned from factory.getSpec" << std::endl;
   */
 
+
+  /* This one succeeded
   std::cerr << "ZZZ calling Network::registerPyRegion..." << std::endl;
   nupic::Network::registerPyRegion("nupic.bindings.regions.TestNode", "TestNode");
   std::cerr << "ZZZ returned from Network::registerPyRegion" << std::endl;
@@ -113,6 +115,16 @@ int main(int argc, char*argv[])
   std::cerr << "ZZZ calling factory.getSpec..." << std::endl;
   factory.getSpec("py.TestNode");
   std::cerr << "ZZZ returned from factory.getSpec" << std::endl;
+  */
+
+
+  std::cerr << "ZZZ calling Network::registerPyRegion..." << std::endl;
+  nupic::Network::registerPyRegion("nupic.bindings.regions.TestNode", "TestNode");
+  std::cerr << "ZZZ returned from Network::registerPyRegion" << std::endl;
+
+  // From Network::addRegion
+  auto r = new nupic::Region("level2", "py.TestNode", "{int32Param: 444}");
+  r = r;
 
   return 0;
 }
