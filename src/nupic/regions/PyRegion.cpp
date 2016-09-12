@@ -121,8 +121,10 @@ extern "C"
   {
     if (finalizePython)
     {
+      std::cerr << "ZZZ Calling Py_Finalize" << std::endl;
       //NTA_DEBUG << "Called Py_Finalize()";
       Py_Finalize();
+      std::cerr << "ZZZ Returned from Py_Finalize" << std::endl;
     }
   }
 

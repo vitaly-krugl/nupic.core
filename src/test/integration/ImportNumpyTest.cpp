@@ -91,6 +91,7 @@ int main(int argc, char*argv[])
   std::cerr << "ZZZ returned from n.addRegion" << std::endl;
   */
 
+
   /* This one succeeded on _import_array, but failed later (probably because
      region wasn't registered)
      ERR:  Matching Python module for TestNode not found.
@@ -102,7 +103,7 @@ int main(int argc, char*argv[])
   */
 
 
-  /* This one succeeded
+  /* This one succeeded all the way.
   std::cerr << "ZZZ calling Network::registerPyRegion..." << std::endl;
   nupic::Network::registerPyRegion("nupic.bindings.regions.TestNode", "TestNode");
   std::cerr << "ZZZ returned from Network::registerPyRegion" << std::endl;
@@ -115,6 +116,24 @@ int main(int argc, char*argv[])
   std::cerr << "ZZZ calling factory.getSpec..." << std::endl;
   factory.getSpec("py.TestNode");
   std::cerr << "ZZZ returned from factory.getSpec" << std::endl;
+
+  // These was the code flow:
+  //ZZZ calling Network::registerPyRegion...
+  //ZZZ returned from Network::registerPyRegion
+  //ZZZ calling RegionImplFactory::getInstance...
+  //ZZZ returned from RegionImplFactory::getInstance
+  //ZZZ calling factory.getSpec...
+  //ZZZ calling boost::shared_ptr<DynamicPythonLibrary>...
+  //ZZZ calling initPython_...
+  //ZZZ Calling Py_Initialize...
+  //ZZZ Returned from Py_Initialize...
+  //ZZZ calling _import_array...
+  //ZZZ returned from _import_array
+  //ZZZ returned from initPython_
+  //ZZZ returned from boost::shared_ptr<DynamicPythonLibrary>
+  //ZZZ calling pyLib->createSpec...
+  //ZZZ returned from pyLib->createSpec
+  //ZZZ returned from factory.getSpec
   */
 
 
