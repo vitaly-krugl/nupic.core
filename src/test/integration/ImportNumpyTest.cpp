@@ -33,11 +33,11 @@
 //#include <Python.h>
 //#include <numpy/arrayobject.h>
 
-#include <nupic/engine/Network.hpp>
-//#include <nupic/engine/NuPIC.hpp>
-//#include <nupic/regions/PyRegion.hpp>
+//#include <nupic/engine/Network.hpp>
+#include <nupic/engine/NuPIC.hpp>
+#include <nupic/regions/PyRegion.hpp>
 
-#include <nupic/engine/Region.hpp>
+//#include <nupic/engine/Region.hpp>
 
 //#include <nupic/engine/RegionImplFactory.hpp>
 
@@ -95,8 +95,10 @@ int main(int argc, char*argv[])
   /* This one succeeded on _import_array, but failed later (probably because
      region wasn't registered)
      ERR:  Matching Python module for TestNode not found.
+
   // From Region:Region(name, nodeType, nodeParams, *network)
   nupic::RegionImplFactory & factory = nupic::RegionImplFactory::getInstance();
+
   std::cerr << "ZZZ calling factory.getSpec..." << std::endl;
   factory.getSpec("py.TestNode");
   std::cerr << "ZZZ returned from factory.getSpec" << std::endl;
@@ -147,12 +149,19 @@ int main(int argc, char*argv[])
   r = r;
   */
 
+  /* Fails as before, and there was no unexpected call to Py_Finalize.
   // Back to n.addRegion, but with Py_Finalize instrumented in PyRegion.cpp
   nupic::Network n;
 
   std::cerr << "ZZZ calling n.addRegion..." << std::endl;
   nupic::Region* level2 = n.addRegion("level2", "py.TestNode", "{int32Param: 444}");
   std::cerr << "ZZZ returned from n.addRegion" << std::endl;
+  */
+
+
+  nupic::NuPIC::init();
+  nupic::PyRegion::NTA_initPython();
+
 
   return 0;
 }
