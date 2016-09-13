@@ -33,8 +33,11 @@
 //#include <Python.h>
 //#include <numpy/arrayobject.h>
 
+#include <apr-1/apr_general.h>
+
+
 //#include <nupic/engine/Network.hpp>
-#include <nupic/engine/NuPIC.hpp>
+//#include <nupic/engine/NuPIC.hpp>
 #include <nupic/regions/PyRegion.hpp>
 
 //#include <nupic/engine/Region.hpp>
@@ -159,7 +162,23 @@ int main(int argc, char*argv[])
   */
 
 
+  /* This reproduces it; see https://github.com/numenta/nupic.core/issues/1075
   nupic::NuPIC::init();
+  nupic::PyRegion::NTA_initPython();
+  */
+
+
+  // NOTE: per http://apr.apache.org/docs/apr/1.5/group__apr__library.html,
+  //  library code should use *apr_initialize* instead of apr_app_initialize.
+  //  Also, according to that documentation: "This MUST be the first function
+  //  called for any APR library. It is safe to call apr_initialize several
+  //  times as long as apr_terminate is called the same number of times."
+  //
+  // From NuPIC::init
+  int argc=1;
+  const char *argv[1] = {"NuPIC"};
+  apr_app_initialize(&argc, (const char* const **)&argv, nullptr /*env*/);
+
   nupic::PyRegion::NTA_initPython();
 
 
