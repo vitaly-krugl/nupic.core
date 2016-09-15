@@ -171,6 +171,7 @@
 //}
 
 
+/* This reproduced the import error on Windows 10
 
 #include <nupic/regions/PyRegion.hpp>
 #include <nupic/engine/NuPIC.hpp>
@@ -189,9 +190,37 @@ int main(int argc, char*argv[])
   // From NuPIC::init
   int argcnt=1;
   const char *argvec[1] = {"NuPIC"};
-  apr_app_initialize(&argcnt, (const char* const **)&argvec, nullptr /*env*/);
+  apr_app_initialize(&argcnt, (const char* const **)&argvec, nullptr);
 
   nupic::PyRegion::NTA_initPython();
+
+  return 0;
+}
+*/
+
+
+
+
+// Try apr_initialize instead of apr_app_initialize
+#include <nupic/regions/PyRegion.hpp>
+#include <nupic/engine/NuPIC.hpp>
+#include <nupic/engine/RegionImplFactory.hpp>
+#include <nupic/utils/Log.hpp>
+#include <apr-1/apr_general.h>
+
+int main(int argc, char*argv[])
+{
+  // NOTE: per http://apr.apache.org/docs/apr/1.5/group__apr__library.html,
+  //  library code should use *apr_initialize* instead of apr_app_initialize.
+  //  Also, according to that documentation: "This MUST be the first function
+  //  called for any APR library. It is safe to call apr_initialize several
+  //  times as long as apr_terminate is called the same number of times."
+  //
+  apr_initialize();
+
+  std::cerr << "ZZZ calling PyRegion::NTA_initPython..." << std::endl;
+  nupic::PyRegion::NTA_initPython();
+  std::cerr << "ZZZ returned from PyRegion::NTA_initPython" << std::endl;
 
   return 0;
 }
