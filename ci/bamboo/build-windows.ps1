@@ -170,7 +170,7 @@ WrapCmd {
 }
 
 # Make nupic.core from non-debug configuration
-WrapCmd { cmake --build . --target install --config Release }
+WrapCmd { cmake --build . --target install --config Release -- --debug=a}
 
 popd
 
